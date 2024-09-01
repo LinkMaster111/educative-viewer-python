@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Educative</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='tailwind.min.css') }}">
+</head>
+
+<body class="bg-gray-900 text-white">
+
+
+
+
+    <div id="settingsModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden flex justify-center items-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md w-96">
+            <h2 class="text-xl font-bold mb-4">Settings</h2>
+            <label for="baseDir" class="block text-sm font-medium text-gray-300 mb-2">Base Directory</label>
+            <!-- Form to submit new base directory -->
+            <form id="settingsForm" method="POST">
+                <input type="text" name="baseDir" id="baseDir"
+                    class="w-full px-3 py-2 rounded bg-gray-700 text-white border border-gray-600"
+                    placeholder="Enter new base directory">
+                <div class="flex justify-end mt-4">
+                    <button type="submit" id="saveButton"
+                        class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-400 mr-2">Save</button>
+                    <button type="button" id="closeButton"
+                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+    <div class="flex flex-row">
+
+        <div class="lg:w-3/5 w-4/5 mx-auto py-8 px-4">
+            <div class="flex flex-row justify-between items-center">
+                <div class="h-16 w-44 flex items-center justify-center">
+                    <img src="{{ url_for('static', filename='educative.svg') }}" class="object-fill" alt="">
+                </div>
+                <div class="">
+                    <button id="settingsButton" class="bg-indigo-500 text-white px-2 py-2 rounded hover:bg-indigo-400">
+                        ⚙️
+                    </button>
+                </div>
+            </div>
+            {% for category, topics in file_mapping.items() %}
+            <div
+                class="flex w-full flex-col rounded border border-solid shadow border-transparent border-gray-800 mb-6">
+                <p class="flex w-full cursor-pointer flex-col">
+                <div class="h-2 w-full rounded-t text-gray-200 bg-indigo-400"></div>
+                <div class="flex w-full flex-col px-6 pb-4 pt-6 bg-gray-700">
+                    <div class="mb-1 flex items-center gap-4">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg" class="fill-current text-indigo-200">
+                            <g clip-path="url(#moduleIcon)" fill="currentColor">
+                                <path
+                                    d="M2.35 0H.47A.47.47 0 000 .47v1.9a.47.47 0 10.94 0V.94h1.4a.47.47 0 100-.94zM15.53 0h-1.88a.47.47 0 000 .94h1.41v1.43a.47.47 0 10.94 0V.47a.47.47 0 00-.47-.47zM2.35 15.06H.94v-1.44a.47.47 0 00-.94 0v1.9c0 .27.21.48.47.48h1.88a.47.47 0 000-.94zM15.53 13.15a.47.47 0 00-.47.47v1.44h-1.4a.47.47 0 000 .94h1.87c.26 0 .47-.21.47-.47v-1.9a.47.47 0 00-.47-.48zM14.76 3.84L8.24.06a.47.47 0 00-.47 0L1.24 3.84a.47.47 0 00-.24.41v7.5c0 .17.1.33.24.4l6.53 3.79a.48.48 0 00.47 0l6.52-3.78c.15-.11.23-.2.24-.4V4.25a.47.47 0 00-.24-.4zM7.53 14.72l-5.12-2.97L6.36 9.5a.47.47 0 10-.47-.81l-3.95 2.26V5.06l5.6 3.21v6.45zM8 7.46L2.41 4.25 8 1l5.59 3.24L8 7.46zm6.06 3.48l-3.95-2.26a.47.47 0 00-.47.8l3.95 2.27-5.12 2.97V8.27l5.6-3.21v5.88z">
+                                </path>
+                            </g>
+                            <defs>
+                                <clipPath id="moduleIcon">
+                                    <path fill="#fff" d="M0 0h16v16H0z"></path>
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="flex w-full items-center justify-between">
+                            <a href="#{{ category }}" id="{{ category }}" class="text-lg font-bold m-0 mb-2 sm:mb-1"
+                                title="{{ category }}">{{ category }}</a>
+
+                        </div>
+                    </div>
+                </div>
+                </p>
+                <div class="tailwind-hidden flex-col px-4 py-6 pb-0 dark:bg-gray-800 ">
+                    {% for topic in topics %}
+                    <div class="mx-0 mb-12 flex flex-col">
+                        <div class="mb-2 flex items-center">
+                            <p
+                                class="text-md m-0 mr-3 flex h-8 w-3 items-center justify-center rounded-full bg-gray-100 p-4 bg-gray-800">
+                                {{ loop.index }}</p>
+                            <a href="/view/{{ topic['offline_file'] }}" class="text-md m-0">{{ topic['title'] }}</a>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="fixed top-0 my-8 mb-8 right-4 w-[15%] hidden lg:block  ">
+            <div class="bg-gray-800 rounded-lg p-4 shadow-md">
+                <div class="overflow-y-auto min-h-60 max-h-96">
+                    <h2 class="text-lg font-semibold mb-4">Modules</h2>
+                    <ul class="space-y-2">
+                        {% for category, topics in file_mapping.items() %}
+                        <li>
+                            <a href="#{{ category }}" class="text-sm text-indigo-400 hover:text-indigo-300">{{ category
+                                }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const settingsButton = document.getElementById('settingsButton');
+            const settingsModal = document.getElementById('settingsModal');
+            const closeButton = document.getElementById('closeButton');
+            const saveButton = document.getElementById('saveButton');
+            const baseDirInput = document.getElementById('baseDir');
+
+            // Show modal
+            settingsButton.addEventListener('click', () => {
+                settingsModal.classList.remove('hidden');
+            });
+
+            // Hide modal
+            closeButton.addEventListener('click', () => {
+                settingsModal.classList.add('hidden');
+            });
+
+            // Save base directory to localStorage
+            saveButton.addEventListener('click', () => {
+                const baseDir = baseDirInput.value;
+                if (baseDir) {
+                    localStorage.setItem('baseDir', baseDir);
+                    settingsModal.classList.add('hidden');
+                    // Optional: Add logic to update the base directory on the server or reload the page
+                }
+            });
+
+            // Load base directory from localStorage on page load
+            const savedBaseDir = localStorage.getItem('baseDir');
+            if (savedBaseDir) {
+                baseDirInput.value = savedBaseDir;
+                // Optional: Add logic to use this base directory to fetch files on page load
+            }
+        });
+    </script>
+</body>
+
+</html>
