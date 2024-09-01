@@ -117,3 +117,5 @@ Disclaimer: This project is for educational purposes only and does not intend to
 
 - **Executable Not Running**:
   Make sure all dependencies and files are correctly bundled in the executable. If using PyInstaller, ensure to include all necessary data files (CSS, templates) with the `--add-data` option.
+
+**This project is created with extensive help from ChatGPT.**
